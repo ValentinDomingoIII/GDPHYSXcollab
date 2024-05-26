@@ -257,12 +257,21 @@ int main(void)
         -100.f, //z near
         100.f);  //z fa
 
-    Physics::MyVector sample(0, 0, 0);
-    Physics::MyVector toAdd(0, 0, 0);
 
-    Physics::P6Particle particle = Physics::P6Particle();
-    particle.velocity = Physics::MyVector(100, 0, 0);
-    particle.acceleration = Physics::MyVector(-30, 0, 0);
+    Physics::MyVector initial_velocity;
+    std::cout << "Enter X:";
+    std::cin >> initial_velocity.x;
+    std::cout << "Enter Y:";
+    std::cin >> initial_velocity.y;
+    std::cout << "Enter Z:";
+    std::cin >> initial_velocity.z;
+
+
+
+    Physics::P6Particle particle;
+    particle.position = Physics::MyVector(0, -height / 2, 0); // Start at the bottom of the screen oor at least it should
+    particle.velocity = initial_velocity;
+    particle.acceleration = Physics::MyVector(0, -50, 0); // Gravity
 
     using clock = std::chrono::high_resolution_clock;
     auto curr_time = clock::now();
@@ -271,7 +280,7 @@ int main(void)
 
     Object obj;
 
-    particle.position = sample;
+
 
     while (!glfwWindowShouldClose(window))
     {
