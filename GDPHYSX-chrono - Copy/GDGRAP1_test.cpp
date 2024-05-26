@@ -12,7 +12,6 @@
 #include "Physics/MyVector.h"
 #include "Physics/P6Particle.hpp"
 
-
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
 
@@ -145,7 +144,7 @@ public:
 
 int main(void)
 {
-    float x = 0, y = 0, z = -2.f, scale_x = 1, scale_y = 1, scale_z = 1, theta = 90, axis_x = 0, axis_y = 1, axis_z = 0;
+    float x = 0, y = 0, z = -2.f, scale_x = 10, scale_y = 10, scale_z = 10, theta = 90, axis_x = 0, axis_y = 1, axis_z = 0;
     float height = 600.0f;
     float width = 600.0f;
 
@@ -156,7 +155,7 @@ int main(void)
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(width, height, "Valentin C. Domingo III", NULL, NULL);
+    window = glfwCreateWindow(width, height, "Bumanglag, Domingo", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -169,8 +168,6 @@ int main(void)
 
 
     //glViewport(0, 0, 600, 600);
-
-
 
     glfwSetKeyCallback(window, Key_Callback);
     std::fstream vertSrc("Shaders/sample.vert");
@@ -253,63 +250,31 @@ int main(void)
     glm::mat4 identity_matrix = glm::mat4(1.0f);
     //orthographiuc usage
     glm::mat4 projectionMatrix = glm::ortho(
-        -40.f, //left
-        40.f, //right
-        -40.f, //bot
-        40.f, //top
-        -40.f, //z near
-        40.f);  //z fa
-    /* Loop until the user closes the window */
-
-
-
-
-/* glm::mat4 projectionMatrix = glm::perspective(
-     glm::radians(60.f),//FOV
-     height / width,//aspect ratio
-     0.1f,//znear
-     100.f//zfar
- );*/
+        -width / 2.f, //left
+        width / 2.f, //right
+        -height / 2.f, //bot
+        height / 2.f, //top
+        -100.f, //z near
+        100.f);  //z fa
 
     Physics::MyVector sample(0, 0, 0);
     Physics::MyVector toAdd(0, 0, 0);
+
     Physics::P6Particle particle = Physics::P6Particle();
     particle.velocity = Physics::MyVector(100, 0, 0);
     particle.acceleration = Physics::MyVector(-30, 0, 0);
-
-    float dotprod = sample.DotProduct(toAdd);
-
-    std::cout << "Dot product of vector1 and vector2: " << dotprod << "\n";
-
-    /*testing
-
-
-
-    */
-
-
-
-    /*  auto newObject = new Object();
-      newObject->pos = glm::vec3(x, y, z);
-      objects.push_back(newObject);*/
-
-
-
 
     using clock = std::chrono::high_resolution_clock;
     auto curr_time = clock::now();
     auto prev_time = curr_time;
     std::chrono::nanoseconds  curr_ns(0);
 
-
     Object obj;
 
+    particle.position = sample;
+
     while (!glfwWindowShouldClose(window))
-
     {
-
-
-
         //Get the current time
         curr_time = clock::now();
         //check the duration in between the last iteration
@@ -319,33 +284,24 @@ int main(void)
 
         curr_ns += dur;
         if (curr_ns >= timestep)
-            {
+        {
             auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(curr_ns);
             std::cout << "MS:" << (float)ms.count() << "\n";
             //reset
-            curr_ns -= curr_ns;
-            std::cout << " P6 update\n";
+            curr_ns -= timestep;
 
             //convert ms to seconds
             particle.Update((float)ms.count() / 1000);
-
-            }
-        std::cout << "Normal update\n";
+        }
 
         /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
-
-
-
-
-  
+        glClear(GL_COLOR_BUFFER_BIT);  
 
         glClear(GL_COLOR_BUFFER_BIT);
 
-        obj.pos = glm::vec3(sample.x, sample.y, sample.z);  // Update position based on user input
+        obj.pos = ((glm::vec3)particle.position);  // Update position based on user input
 
         theta = theta_mod;
-        scale_x = scale_mod;
 
         glm::mat4 transformation_matrix = glm::translate(
             identity_matrix,
