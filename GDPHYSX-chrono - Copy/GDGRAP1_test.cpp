@@ -24,7 +24,6 @@ float z_mod = 0.f;
 float theta_mod = 0;
 float scale_mod = 1;
 
-
 void Key_Callback(GLFWwindow* window,
     int key,
     int scancode,
@@ -144,7 +143,7 @@ public:
 
 int main(void)
 {
-    float x = 0, y = 0, z = -2.f, scale_x = 10, scale_y = 10, scale_z = 10, theta = 90, axis_x = 0, axis_y = 1, axis_z = 0;
+    float x = 0, y = 0, z = -2.f, scale_x = 20, scale_y = 20, scale_z = 20, theta = 90, axis_x = 0, axis_y = 1, axis_z = 0;
     float height = 600.0f;
     float width = 600.0f;
 
@@ -248,15 +247,23 @@ int main(void)
     std::vector<Object*> objects;
 
     glm::mat4 identity_matrix = glm::mat4(1.0f);
-    //orthographiuc usage
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    
+    //orthographic
+    //adjusted so that scale is 1px = 1m
+    
     glm::mat4 projectionMatrix = glm::ortho(
         -width / 2.f, //left
         width / 2.f, //right
         -height / 2.f, //bot
         height / 2.f, //top
         -100.f, //z near
-        100.f);  //z fa
+        100.f);  //z far
 
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    /*setup for initial velocity, taken from user input*/
 
     Physics::MyVector initial_velocity;
     std::cout << "Enter X:";
@@ -266,21 +273,24 @@ int main(void)
     std::cout << "Enter Z:";
     std::cin >> initial_velocity.z;
 
-
+    ///////////////////////////////////////////////////////////////////////////////////////////
 
     Physics::P6Particle particle;
-    particle.position = Physics::MyVector(0, -height / 2, 0); // Start at the bottom of the screen oor at least it should
+    particle.position = Physics::MyVector(0, -height / 2, 0); // Start at the bottom of the screen
     particle.velocity = initial_velocity;
+
     particle.acceleration = Physics::MyVector(0, -50, 0); // Gravity
 
     using clock = std::chrono::high_resolution_clock;
     auto curr_time = clock::now();
     auto prev_time = curr_time;
     std::chrono::nanoseconds  curr_ns(0);
+    std::chrono::nanoseconds  fall_curr_ns(0);
 
+    ///////////////////////////////////////////////////////////////////////////////////////////
     Object obj;
 
-
+    float secondsBeforeFloorHit = 0.f;
 
     while (!glfwWindowShouldClose(window))
     {
@@ -292,23 +302,31 @@ int main(void)
         prev_time = curr_time;
 
         curr_ns += dur;
+        fall_curr_ns += dur;
+
         if (curr_ns >= timestep)
         {
             auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(curr_ns);
-            std::cout << "MS:" << (float)ms.count() << "\n";
+            auto fall = std::chrono::duration_cast<std::chrono::milliseconds>(fall_curr_ns);
+            //std::cout << "MS:" << (float)ms.count() << "\n";
             //reset
             curr_ns -= timestep;
 
             //convert ms to seconds
             particle.Update((float)ms.count() / 1000);
+
+            secondsBeforeFloorHit = (float)fall.count() / 1000;
         }
 
         /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);  
-
         glClear(GL_COLOR_BUFFER_BIT);
 
         obj.pos = ((glm::vec3)particle.position);  // Update position based on user input
+
+        if (obj.pos.y <= -height / 2 && secondsBeforeFloorHit > 1.f) {
+            std::cout << "It took " << secondsBeforeFloorHit << " for it to land." << std::endl;
+            break;
+        }
 
         theta = theta_mod;
 
