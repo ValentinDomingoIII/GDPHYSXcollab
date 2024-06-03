@@ -372,6 +372,10 @@ int main(void)
         glDeleteBuffers(1, &obj->EBO);
     }
 
+    char a;
+
+    std::cout << "Enter any character to exit. . ." << std::endl;
+    std::cin >> a;
     glfwTerminate();
     return 0;
 }
