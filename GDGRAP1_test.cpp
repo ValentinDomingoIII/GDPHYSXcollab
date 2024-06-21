@@ -215,10 +215,12 @@ int main(void)
 
         glm::vec3 pos;
 
+        //sets the movement of the camera to rotate around the center with a radius of 400
         pos.x = cos(glm::radians(cameraPos.x)) * cos(glm::radians(cameraPos.y)) * 400.f;
         pos.y = sin(glm::radians(cameraPos.y)) * 400.f;
         pos.z = sin(glm::radians(cameraPos.x)) * cos(glm::radians(cameraPos.y)) * 400.f;
 
+        
         if (ortho->getCameraUse()) {
             ortho->Update(pos, center);
         }
