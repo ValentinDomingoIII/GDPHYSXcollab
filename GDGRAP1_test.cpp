@@ -59,9 +59,9 @@ void generateRandomColor(GLfloat* color) {
 P6::MyVector generateRandomForce() {
     P6::MyVector Force;
 
-    Force.x = randomFloat(-3000.f, 3000.f);
+    Force.x = randomFloat(-4000.f, 4000.f);
     Force.y = randomFloat(1000.f, 10000.f);
-    Force.z = randomFloat(-3000.f, 3000.f);
+    Force.z = randomFloat(-4000.f, 4000.f);
 
     return Force;
 }
@@ -271,6 +271,38 @@ int main(void)
                 }
             }
 
+            // Spawn a new object if one second has passed since the last spawn
+            auto now = clock::now(); // Get the current time
+            auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastSpawnTime); // Calculate elapsed time in miliseconds
+            if (elapsed_ms.count() >= 5 && spawnedObjects < numObjects) { // Check if one second has passed and the number of objects spawned is less than numObjects
+                // Spawn the object
+                P6::P6Particle* particle = new P6::P6Particle();
+                particle->position = P6::MyVector(0, -350, 0);
+                particle->mass = 1.f; // 1KG
+                particle->AddForce(generateRandomForce()); // Apply some initial force
+                particle->lifespan = randomFloat(1.f, 10.f);
+                pWorld.forceRegistry.Add(particle, &drag);
+                pWorld.AddParticle(particle);
+
+                GLfloat color[4];
+
+                generateRandomColor(color);
+
+                float scale = randomFloat(2.0f, 10.f);
+
+                Object* obj = new Object(color, shader);
+                obj->scale_x = scale;
+                obj->scale_y = scale;
+                obj->scale_z = scale;
+
+                RenderParticle* renderParticle = new RenderParticle(particle, obj);
+                vecRenderParticle.push_back(renderParticle);
+
+                // Update the last spawn time and increment the counter
+                lastSpawnTime = now; // Update the last spawn time
+                spawnedObjects++; // Increment the number of objects spawned
+            }
+
         }
         else {
             pause = true;
@@ -280,37 +312,7 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
         glBindVertexArray(VAO);
 
-        // Spawn a new object if one second has passed since the last spawn
-        auto now = clock::now(); // Get the current time
-        auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastSpawnTime); // Calculate elapsed time in miliseconds
-        if (elapsed_ms.count() >= 5 && spawnedObjects < numObjects) { // Check if one second has passed and the number of objects spawned is less than numObjects
-            // Spawn the object
-            P6::P6Particle* particle = new P6::P6Particle();
-            particle->position = P6::MyVector(0, -350, 0);
-            particle->mass = 1.f; // 1KG
-            particle->AddForce(generateRandomForce()); // Apply some initial force
-            particle->lifespan = randomFloat(1.f, 10.f);
-            pWorld.forceRegistry.Add(particle, &drag);
-            pWorld.AddParticle(particle);
-
-            GLfloat color[4];
-
-            generateRandomColor(color);
-
-            float scale = randomFloat(2.0f, 10.f);
-
-            Object* obj = new Object(color, shader);
-            obj->scale_x = scale;
-            obj->scale_y = scale;
-            obj->scale_z = scale;
-
-            RenderParticle* renderParticle = new RenderParticle(particle, obj);
-            vecRenderParticle.push_back(renderParticle);
-
-            // Update the last spawn time and increment the counter
-            lastSpawnTime = now; // Update the last spawn time
-            spawnedObjects++; // Increment the number of objects spawned
-        }
+        
         for (RenderParticle* particle : vecRenderParticle) {
             particle->Draw();
 
