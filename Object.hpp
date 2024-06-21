@@ -9,13 +9,8 @@
 #include <vector>
 
 class Object {
-public:
+private:
     Shader* shader;
-
-
-    float scale_x = 5;
-    float scale_y = 5;
-    float scale_z = 5;
 
     float theta = 90;
 
@@ -24,6 +19,11 @@ public:
     float axis_z = 0;
 
 public:
+
+    float scale_x = 5;
+    float scale_y = 5;
+    float scale_z = 5;
+
     glm::vec3 pos;
 
     P6::MyVector avgVelocity;
@@ -39,10 +39,10 @@ public:
     GLfloat color[4];
 
 public:
-    Object(GLfloat* color) {
+    Object(GLfloat* color, Shader* shader) {
         std::copy(color, color + 4, this->color);
 
-        this->shader = new Shader("Shaders/sample.vert", "Shaders/sample.frag");
+        this->shader = shader;
     }
 
 public:

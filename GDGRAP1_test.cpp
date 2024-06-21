@@ -55,7 +55,7 @@ void generateRandomColor(GLfloat* color) {
     
 }
 
-// Function to generate random position within the window
+// Function to generates random force on the particle
 P6::MyVector generateRandomForce() {
     P6::MyVector Force;
 
@@ -217,14 +217,13 @@ int main(void)
 
         float scale = randomFloat(2.0f, 10.f);
 
-        Object* obj = new Object(color);
+        Object* obj = new Object(color, shader);
         obj->scale_x = scale;
         obj->scale_y = scale;
         obj->scale_z = scale;
 
         RenderParticle* renderParticle = new RenderParticle(particle, obj);
         vecRenderParticle.push_back(renderParticle);
-
     }
 
     glfwSetKeyCallback(window, Key_CallBack); //calls function for updating x,y,z of the camera

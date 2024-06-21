@@ -1,6 +1,6 @@
 #pragma once
 
-class MyCamera {
+class Camera {
 protected:
 	glm::vec3 cameraPos;
 	glm::vec3 viewFront;
@@ -17,7 +17,7 @@ protected:
 	bool inUse;
 
 public:
-	MyCamera(float height, float width, Shader* shader) {
+	Camera(float height, float width, Shader* shader) {
 		this->cameraPos = {0,0,0};
 		this->viewFront = {};
 		this->WorldUp = glm::vec3(0, 1.0f, 0);
@@ -70,9 +70,9 @@ public:
 
 };
 
-class PerspectiveCamera : public MyCamera {
+class PerspectiveCamera : public Camera {
 public:
-	PerspectiveCamera(float height, float width, Shader* shader) : MyCamera(height, width, shader) {
+	PerspectiveCamera(float height, float width, Shader* shader) : Camera(height, width, shader) {
 
 	}
 
@@ -90,9 +90,9 @@ public:
 	}
 };
 
-class OrthographicCamera : public MyCamera {
+class OrthographicCamera : public Camera {
 public:
-	OrthographicCamera(float height, float width, Shader* shader) : MyCamera(height, width, shader) {
+	OrthographicCamera(float height, float width, Shader* shader) : Camera(height, width, shader) {
 
 	}
 
