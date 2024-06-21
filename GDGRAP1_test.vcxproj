@@ -158,7 +158,6 @@
     <ClInclude Include="Physics\ForceGenerator.hpp" />
     <ClInclude Include="Physics\ForceRegistry.hpp" />
     <ClInclude Include="Physics\GravityForceGenerator.hpp" />
-    <ClInclude Include="Physics\MyVector.h" />
     <ClInclude Include="Physics\MyVector.hpp" />
     <ClInclude Include="Physics\P6Particle.hpp" />
     <ClInclude Include="Physics\PhysicsWorld.hpp" />

@@ -56,9 +56,6 @@
     <ClInclude Include="Model3D.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Physics\MyVector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Physics\P6Particle.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
