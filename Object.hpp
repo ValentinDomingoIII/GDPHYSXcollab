@@ -39,10 +39,10 @@ public:
     GLfloat color[4];
 
 public:
-    Object(GLfloat* color) {
+    Object(GLfloat* color, Shader*shader) {
         std::copy(color, color + 4, this->color);
 
-        this->shader = new Shader("Shaders/sample.vert", "Shaders/sample.frag");
+        this->shader = shader;
     }
 
 public:

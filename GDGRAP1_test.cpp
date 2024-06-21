@@ -299,7 +299,7 @@ int main(void)
 
             float scale = randomFloat(2.0f, 10.f);
 
-            Object* obj = new Object(color);
+            Object* obj = new Object(color,shader);
             obj->scale_x = scale;
             obj->scale_y = scale;
             obj->scale_z = scale;
