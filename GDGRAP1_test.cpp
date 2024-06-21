@@ -259,7 +259,7 @@ int main(void)
             ortho->Update(pos, center);
         }
         if (per->getCameraUse()) {
-            glm::vec3 perPos(pos.x, -pos.y, -pos.z);
+            glm::vec3 perPos(pos.x, pos.y, -pos.z);
             per->Update(perPos, center);
         }
 
