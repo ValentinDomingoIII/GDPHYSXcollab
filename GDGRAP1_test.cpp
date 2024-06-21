@@ -52,15 +52,15 @@ void generateRandomColor(GLfloat* color) {
     color[1] = randomFloat(0.0f, 1.0f);
     color[2] = randomFloat(0.0f, 1.0f);
     color[3] = 1.0f;
-    
+
 }
 
-// Function to generates random force on the particle
+// Function to generate random position within the window
 P6::MyVector generateRandomForce() {
     P6::MyVector Force;
 
     Force.x = randomFloat(-3000.f, 3000.f);
-    Force.y = randomFloat(1000.f, 5000.f);
+    Force.y = randomFloat(1000.f, 10000.f);
     Force.z = randomFloat(-3000.f, 3000.f);
 
     return Force;
@@ -122,7 +122,7 @@ int main(void)
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "PC01 Bumanglag, Nikos Railey", NULL, NULL);
+    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "MP1-3 physics engine particle", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -180,7 +180,7 @@ int main(void)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     /////////////////////////////////////////////////////////////////////////
-    
+
     Shader* shader = new Shader("Shaders/sample.vert", "Shaders/sample.frag");
 
     OrthographicCamera* ortho = new OrthographicCamera(WINDOW_HEIGHT, WINDOW_WIDTH, shader);
@@ -202,33 +202,16 @@ int main(void)
 
     std::vector<RenderParticle*> vecRenderParticle;
 
-    for (int i = 0; i < numObjects; ++i) {
-        P6::P6Particle* particle = new P6::P6Particle();
-        particle->position = P6::MyVector(0,-350,0);
-        particle->mass = 1.f; // 1KG
-        particle->AddForce(generateRandomForce()); // Apply some initial force
-        particle->lifespan = randomFloat(1.f, 10.f);
-        pWorld.forceRegistry.Add(particle, &drag);
-        pWorld.AddParticle(particle);
 
-        GLfloat color[4];
 
-        generateRandomColor(color);
 
-        float scale = randomFloat(2.0f, 10.f);
 
-        Object* obj = new Object(color, shader);
-        obj->scale_x = scale;
-        obj->scale_y = scale;
-        obj->scale_z = scale;
-
-        RenderParticle* renderParticle = new RenderParticle(particle, obj);
-        vecRenderParticle.push_back(renderParticle);
-    }
 
     glfwSetKeyCallback(window, Key_CallBack); //calls function for updating x,y,z of the camera
 
     bool pause = false;
+    auto lastSpawnTime = clock::now(); //timer for spawn
+    int spawnedObjects = 0;  //detects alst object spawn time
 
     while (!glfwWindowShouldClose(window))
     {
@@ -296,8 +279,38 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
         glBindVertexArray(VAO);
-      
 
+        // Spawn a new object if one second has passed since the last spawn
+        auto now = clock::now(); // Get the current time
+        auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastSpawnTime); // Calculate elapsed time in miliseconds
+        if (elapsed_ms.count() >= 5 && spawnedObjects < numObjects) { // Check if one second has passed and the number of objects spawned is less than numObjects
+            // Spawn the object
+            P6::P6Particle* particle = new P6::P6Particle();
+            particle->position = P6::MyVector(0, -350, 0);
+            particle->mass = 1.f; // 1KG
+            particle->AddForce(generateRandomForce()); // Apply some initial force
+            particle->lifespan = randomFloat(1.f, 10.f);
+            pWorld.forceRegistry.Add(particle, &drag);
+            pWorld.AddParticle(particle);
+
+            GLfloat color[4];
+
+            generateRandomColor(color);
+
+            float scale = randomFloat(2.0f, 10.f);
+
+            Object* obj = new Object(color, shader);
+            obj->scale_x = scale;
+            obj->scale_y = scale;
+            obj->scale_z = scale;
+
+            RenderParticle* renderParticle = new RenderParticle(particle, obj);
+            vecRenderParticle.push_back(renderParticle);
+
+            // Update the last spawn time and increment the counter
+            lastSpawnTime = now; // Update the last spawn time
+            spawnedObjects++; // Increment the number of objects spawned
+        }
         for (RenderParticle* particle : vecRenderParticle) {
             particle->Draw();
 
@@ -310,7 +323,7 @@ int main(void)
                 shader->setMat4("projection", 1, per->getProjectionMatrix());
                 shader->setMat4("view", 1, per->getViewMatrix());
             }
-            
+
             glDrawElements(GL_TRIANGLES, mesh_indices.size(), GL_UNSIGNED_INT, 0);
         }
 
