@@ -100,10 +100,13 @@ void Key_CallBack(GLFWwindow* window, //pointer to the window
         perB = true;
     }
 
+    //checks if space key is RELEASED to prevent 'hold' press
+
     if (key == GLFW_KEY_SPACE && action == GLFW_RELEASE) {
         play = !play;
     }
 
+    //limits camera rotation on y
     if (cameraPos.y > 89) {
         cameraPos.y = 89;
     }
@@ -230,7 +233,7 @@ int main(void)
         }
 
         if (play && pause) {
-            prev_time = clock::now();
+            prev_time = clock::now(); //if played again right after pause , reset prev time to prevent 'jumping'
             pause = false;
         }
 
