@@ -122,7 +122,7 @@ int main(void)
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "MP1-3 physics engine particle", NULL, NULL);
+    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "MP1-3 Pysics Engine Particle", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
