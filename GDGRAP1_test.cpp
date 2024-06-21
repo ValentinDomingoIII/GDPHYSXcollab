@@ -208,7 +208,6 @@ int main(void)
         particle->mass = 1.f; // 1KG
         particle->AddForce(generateRandomForce()); // Apply some initial force
         particle->lifespan = randomFloat(1.f, 10.f);
-        particle->i = i;
         pWorld.forceRegistry.Add(particle, &drag);
         pWorld.AddParticle(particle);
 

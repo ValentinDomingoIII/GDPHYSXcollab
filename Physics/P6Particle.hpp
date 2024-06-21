@@ -24,8 +24,6 @@ namespace P6 {
 
 		MyVector acceleration;
 
-		int i;
-
 	protected:
 		bool isDestroyed = false;
 		MyVector accumelatedForce = MyVector(0, 0, 0);
