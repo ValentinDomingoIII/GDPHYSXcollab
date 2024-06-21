@@ -202,11 +202,6 @@ int main(void)
 
     std::vector<RenderParticle*> vecRenderParticle;
 
-
-
-
-
-
     glfwSetKeyCallback(window, Key_CallBack); //calls function for updating x,y,z of the camera
 
     bool pause = false;
@@ -271,11 +266,11 @@ int main(void)
                 }
             }
 
-            // Spawn a new object if one second has passed since the last spawn
-            auto now = clock::now(); // Get the current time
+            // spawns a new object if one second has passed since the last spawn
+            auto now = clock::now(); // gets the current time
             auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastSpawnTime); // Calculate elapsed time in miliseconds
             if (elapsed_ms.count() >= 5 && spawnedObjects < numObjects) { // Check if one second has passed and the number of objects spawned is less than numObjects
-                // Spawn the object
+                // spawns the object
                 P6::P6Particle* particle = new P6::P6Particle();
                 particle->position = P6::MyVector(0, -350, 0);
                 particle->mass = 1.f; // 1KG
@@ -298,9 +293,9 @@ int main(void)
                 RenderParticle* renderParticle = new RenderParticle(particle, obj);
                 vecRenderParticle.push_back(renderParticle);
 
-                // Update the last spawn time and increment the counter
-                lastSpawnTime = now; // Update the last spawn time
-                spawnedObjects++; // Increment the number of objects spawned
+                // updates the last spawn time and increment the counter
+                lastSpawnTime = now; // updates the last spawn time
+                spawnedObjects++; // increments the number of objects spawned
             }
 
         }

@@ -64,7 +64,9 @@ public:
 		return this->inUse;
 	}
 
-	virtual void setCameraPos(glm::vec3 cameraPos) = 0;
+	void setCameraPos(glm::vec3 cameraPos) {
+		this->cameraPos = cameraPos;
+	}
 
 	virtual void setProjectionMatrix() = 0;
 
@@ -74,10 +76,6 @@ class PerspectiveCamera : public Camera {
 public:
 	PerspectiveCamera(float height, float width, Shader* shader) : Camera(height, width, shader) {
 
-	}
-
-	void setCameraPos(glm::vec3 cameraPos) {
-		this->cameraPos = cameraPos;
 	}
 
 	void setProjectionMatrix() {
@@ -94,10 +92,6 @@ class OrthographicCamera : public Camera {
 public:
 	OrthographicCamera(float height, float width, Shader* shader) : Camera(height, width, shader) {
 
-	}
-
-	void setCameraPos(glm::vec3 cameraPos) {
-		this->cameraPos = cameraPos;
 	}
 
 	void setProjectionMatrix() {
