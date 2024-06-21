@@ -7,7 +7,7 @@
 namespace P6 {
 	class PhysicsWorld {
 	private:
-		GravityForceGenerator Gravity = GravityForceGenerator(MyVector(0, -0, 0));
+		GravityForceGenerator Gravity = GravityForceGenerator(MyVector(0, -9.8f, 0));
 
 	public:
 		ForceRegistry forceRegistry;

@@ -228,21 +228,9 @@ int main(void)
 
     }
 
-
     glfwSetKeyCallback(window, Key_CallBack); //calls function for updating x,y,z of the camera
 
     bool pause = false;
-
-    glm::mat4 projectionMatrix = glm::ortho(
-        -WINDOW_WIDTH / 2.f, // left
-        WINDOW_WIDTH / 2.f, // right
-        -WINDOW_HEIGHT / 2.f, // bottom
-        WINDOW_HEIGHT / 2.f, // top
-        -400.f, // z near
-        1000.f // z far
-    );
-
-
 
     while (!glfwWindowShouldClose(window))
     {
@@ -289,11 +277,11 @@ int main(void)
                 // Convert ms to seconds
                 pWorld.Update((float)ms.count() / 1000);
 
-                for (auto i = vecRenderParticle.begin(); i != vecRenderParticle.end();) {
-                    RenderParticle* particle = *i;
-                    particle->getParticle()->CheckLife((float)life1.count() / 1000);
 
-                    if (particle->getParticle()->IsDestroyed()) {
+                for (std::vector<RenderParticle*>::iterator i = vecRenderParticle.begin(); i != vecRenderParticle.end();) {
+                    (*i)->getParticle()->CheckLife((float)life1.count() / 1000);
+
+                    if ((*i)->getParticle()->IsDestroyed()) {
                         i = vecRenderParticle.erase(i);
                     }
                     else {
