@@ -15,6 +15,8 @@ namespace P6 {
 		ParticleSpring(P6Particle* particle, float _springConst, float _restLen);
 		
 		void UpdateForce(P6Particle* particle, float time);
+
+		MyVector getAnchorPoint() { return this->otherParticle->position; }
 	};
 }
 
