@@ -220,9 +220,9 @@ int main(void)
     std::vector<RenderParticle*> vecRenderParticle;
 
     P6Particle* particle1 = new P6Particle();
-    particle1->position = MyVector(-100, 150, 0);
-    particle1->mass = 50.f; // 1KG
-    particle1->AddForce(MyVector(10, -10, 0) * 5000.0f); // Apply some initial force
+    particle1->position = MyVector(-300, 150, 0);
+    particle1->mass = 10.f; // 1KG
+    particle1->AddForce(MyVector(0, -10, 0) * 0.0f); // Apply some initial force
     particle1->lifespan = 1000.f;
     pWorld.forceRegistry.Add(particle1, &drag);
     pWorld.AddParticle(particle1);
@@ -241,9 +241,9 @@ int main(void)
     vecRenderParticle.push_back(renderParticle1);
 
     P6Particle* particle2 = new P6Particle();
-    particle2->position = MyVector(100, 150, 0);
-    particle2->mass = 50.f; // 1KG
-    particle2->AddForce(MyVector(-10, -10, 0) * 50000.0f); // Apply some initial force
+    particle2->position = MyVector(300, 150, 0);
+    particle2->mass = 10.f; // 1KG
+    particle2->AddForce(MyVector(0, 10, 0) * 0.0f); // Apply some initial force
     particle2->lifespan = 1000.f;
     pWorld.forceRegistry.Add(particle2, &drag);
     pWorld.AddParticle(particle2);
@@ -259,15 +259,15 @@ int main(void)
     renderParticle2->scale = glm::vec3(particle2->radius, particle2->radius, particle2->radius);
     vecRenderParticle.push_back(renderParticle2);
 
-    AnchoredSpring* spring1 = new AnchoredSpring(MyVector(-100, 200, 0), 5.0f, 0.5f);
-    pWorld.forceRegistry.Add(particle1, spring1);
+    Bungee* bungee = new Bungee();
+    pWorld.forceRegistry.Add(particle1, bungee);
 
-    ParticleSpring* spring2 = new ParticleSpring(particle1, 5.0f, 0.5f);
-    pWorld.forceRegistry.Add(particle2, spring2);
+    Chain* chain = new Chain();
+    pWorld.forceRegistry.Add(particle2, chain);
 
-    RenderLine* line1 = new RenderLine(spring1->getAnchorPoint(), particle1->position, MyVector(1, 1, 1));
+    RenderLine* line1 = new RenderLine(bungee->getanchorPoint(), particle1->position, MyVector(1, 1, 1));
 
-    RenderLine* line2 = new RenderLine(spring2->getAnchorPoint(), particle2->position, MyVector(1, 1, 1));
+    RenderLine* line2 = new RenderLine(chain->getanchorPoint(), particle2->position, MyVector(1, 1, 1));
 
     glfwSetKeyCallback(window, Key_CallBack); //calls function for updating x,y,z of the camera
 
@@ -342,10 +342,10 @@ int main(void)
         glBindVertexArray(VAO);
 
         for (RenderParticle* particle : vecRenderParticle) {
-            line1->Update(spring1->getAnchorPoint(), particle1->position, projectionMatrix);
+            line1->Update(bungee->getanchorPoint(), particle1->position, projectionMatrix);
             line1->Draw();
 
-            line2->Update(spring2->getAnchorPoint(), particle2->position, projectionMatrix);
+            line2->Update(chain->getanchorPoint(), particle2->position, projectionMatrix);
             line2->Draw();
 
             particle->Draw();

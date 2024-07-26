@@ -139,8 +139,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Physics\Springs\Chain.cpp" />
+    <ClCompile Include="Physics\Springs\Bungee.cpp" />
+    <ClCompile Include="Physics\Links\ParticleLink.cpp" />
+    <ClCompile Include="Physics\Springs\ParticleSpring.cpp" />
+    <ClCompile Include="Physics\Springs\AnchoredSpring.cpp" />
+    <ClCompile Include="Physics\ContactResolver.cpp" />
     <ClCompile Include="GDGRAP1_test.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="Physics\ParticleContact.cpp" />
     <ClCompile Include="Physics\DragForceGenerator.cpp" />
     <ClCompile Include="Physics\ForceGenerator.cpp" />
     <ClCompile Include="Physics\ForceRegistry.cpp" />
@@ -149,11 +156,19 @@
     <ClCompile Include="Physics\P6Particle.cpp" />
     <ClCompile Include="Physics\PhysicsWorld.cpp" />
     <ClCompile Include="Physics\RenderParticle.cpp" />
+    <ClCompile Include="Physics\Links\Rods.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Physics\Springs\Chain.hpp" />
+    <ClInclude Include="Physics\Springs\Bungee.hpp" />
+    <ClInclude Include="Physics\Links\ParticleLink.hpp" />
+    <ClInclude Include="Physics\Springs\ParticleSpring.hpp" />
+    <ClInclude Include="Physics\Springs\AnchoredSpring.hpp" />
     <ClInclude Include="Camera.hpp" />
+    <ClInclude Include="Physics\ContactResolver.hpp" />
     <ClInclude Include="Model3D.hpp" />
     <ClInclude Include="Object.hpp" />
+    <ClInclude Include="Physics\ParticleContact.hpp" />
     <ClInclude Include="Physics\DragForceGenerator.hpp" />
     <ClInclude Include="Physics\ForceGenerator.hpp" />
     <ClInclude Include="Physics\ForceRegistry.hpp" />
@@ -162,9 +177,11 @@
     <ClInclude Include="Physics\P6Particle.hpp" />
     <ClInclude Include="Physics\PhysicsWorld.hpp" />
     <ClInclude Include="Physics\RenderParticle.hpp" />
+    <ClInclude Include="Physics\Links\Rods.hpp" />
     <ClInclude Include="Shaders\Shader.hpp" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="tiny_obj_loader.h" />
+    <ClInclude Include="RenderLine.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\sample.frag" />
