@@ -7,7 +7,6 @@ void ParticleContact::Resolve(float time){
 	this->ResolveVelocity(time);
 	// solve for the position after collision
 	this->ResolveInterpenetration(time);
-	printf("here2");
 
 }
 

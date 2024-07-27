@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Physics\Springs\Cable.cpp" />
     <ClCompile Include="Physics\Springs\Chain.cpp" />
     <ClCompile Include="Physics\Springs\Bungee.cpp" />
     <ClCompile Include="Physics\Links\ParticleLink.cpp" />
@@ -159,6 +160,7 @@
     <ClCompile Include="Physics\Links\Rods.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Physics\Springs\Cable.hpp" />
     <ClInclude Include="Physics\Springs\Chain.hpp" />
     <ClInclude Include="Physics\Springs\Bungee.hpp" />
     <ClInclude Include="Physics\Links\ParticleLink.hpp" />

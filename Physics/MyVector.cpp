@@ -21,6 +21,10 @@ MyVector MyVector::operator-(const MyVector v) {
 	return MyVector(this->x - v.x, this->y - v.y, this->z - v.z);
 }
 
+MyVector P6::MyVector::operator/(const float v) {
+	return MyVector(this->x / v, this->y / v, this->z / v);
+}
+
 MyVector MyVector::operator*(const float v) {
 	return MyVector(this->x * v, this->y * v, this->z * v);
 }

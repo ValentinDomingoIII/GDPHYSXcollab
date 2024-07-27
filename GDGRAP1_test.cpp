@@ -21,6 +21,7 @@
 #include "Physics/ParticleContact.hpp"
 #include "Physics/Springs/AnchoredSpring.hpp"
 #include "Physics/Springs/ParticleSpring.hpp"
+#include "Physics/Springs/Cable.hpp"
 #include "Physics/Springs/Bungee.hpp"
 #include "Physics/Springs/Chain.hpp"
 #include "Physics/Links/Rods.hpp"
@@ -35,7 +36,7 @@ using namespace P6;
 #define WINDOW_HEIGHT 800.f
 #define WINDOW_WIDTH 800.f
 
-glm::vec3 cameraPos(0, 0, 0);
+glm::vec3 cameraPos(100, 0, 400);
 
 glm::vec3 center(0, 0, 0);
 
@@ -75,7 +76,9 @@ MyVector generateRandomForce() {
 
     return Force;
 }
-float forceX=0, forceY=0, forceZ=0;
+
+float forceX, forceY, forceZ;
+
 //early declration
 P6Particle* particle1 = new P6Particle();
 void Key_CallBack(GLFWwindow* window, //pointer to the window
@@ -138,11 +141,17 @@ int main(void)
     //for user input
     float scale;
     float distance;
-    
+    float length;
+    float yGravity;
+
+    std::cout << "Enter the length of the cable: ";
+    std::cin >> length;
     std::cout << "Enter the scale for the objects: ";
     std::cin >> scale;
     std::cout << "Enter the distance for the objects: ";
     std::cin >> distance;
+    std::cout << "Enter the gravity strength: ";
+    std::cin >> yGravity;
     std::cout << "Enter the force X: ";
     std::cin >> forceX;
     std::cout << "Enter the force Y: ";
@@ -230,6 +239,7 @@ int main(void)
         400.f);  //z far
 
     PhysicsWorld pWorld = PhysicsWorld();
+    pWorld.Gravity = MyVector(0, yGravity, 0);
     DragForceGenerator drag = DragForceGenerator();
 
     using clock = std::chrono::high_resolution_clock;
@@ -243,13 +253,12 @@ int main(void)
     
     particle1->position = MyVector(0-(distance*2), 150, 0);
     particle1->mass = 50.f; // 1KG
-   // particle1->AddForce(MyVector(10, -10, 0) * 000.0f); // Apply some initial force
+   //particle1->AddForce(MyVector(10, -10, 0) * 000.0f); // Apply some initial force
     particle1->lifespan = 1000.f;
     pWorld.forceRegistry.Add(particle1, &drag);
     pWorld.AddParticle(particle1);
 
     GLfloat red[] = { 1,0,0,1 };
-
 
     Object* obj1 = new Object(red, shader);
     obj1->scale_x = scale;
@@ -257,8 +266,6 @@ int main(void)
     obj1->scale_z = scale;
 
     particle1->radius = scale;
-
-
 
 
     RenderParticle* renderParticle1 = new RenderParticle(particle1, obj1);
@@ -328,7 +335,6 @@ int main(void)
     obj4->scale_z = scale;
 
     particle4->radius = scale;
-   
 
     RenderParticle* renderParticle4 = new RenderParticle(particle4, obj4);
     renderParticle4->scale = glm::vec3(particle4->radius, particle4->radius, particle4->radius);
@@ -354,29 +360,27 @@ int main(void)
     vecRenderParticle.push_back(renderParticle5);
 
     ///////////////////class lines///////////////////////
-    AnchoredSpring* spring1 = new AnchoredSpring(MyVector(0-(distance*2), 160, 0), 5.0f, 0.5f);
-    pWorld.forceRegistry.Add(particle1, spring1);
+    Cable* cable1 = new Cable(MyVector(0-(distance*2), 160, 0), length);
+    pWorld.forceRegistry.Add(particle1, cable1);
 
+    Cable* cable2 = new Cable(MyVector(0-distance, 160, 0), length);
+    pWorld.forceRegistry.Add(particle2, cable2);
 
-    AnchoredSpring* spring2 = new AnchoredSpring(MyVector(0-distance, 160, 0), 5.0f, 0.5f);
-    pWorld.forceRegistry.Add(particle2, spring2);
+    Cable* cable3 = new Cable(MyVector(0, 160, 0), length);
+    pWorld.forceRegistry.Add(particle3, cable3);
 
-    AnchoredSpring* spring3 = new AnchoredSpring(MyVector(0, 160, 0), 5.0f, 0.5f);
-    pWorld.forceRegistry.Add(particle3, spring3);
+    Cable* cable4 = new Cable(MyVector(0+distance, 160, 0), length);
+    pWorld.forceRegistry.Add(particle4, cable4);
 
-
-    AnchoredSpring* spring4 = new AnchoredSpring(MyVector(0+distance, 160, 0), 5.0f, 0.5f);
-    pWorld.forceRegistry.Add(particle4, spring4);
-
-    AnchoredSpring* spring5 = new AnchoredSpring(MyVector(0+(distance*2), 160, 0), 5.0f, 0.5f);
-    pWorld.forceRegistry.Add(particle5, spring5);
+    Cable* cable5 = new Cable(MyVector(0+(distance*2), 160, 0), length);
+    pWorld.forceRegistry.Add(particle5, cable5);
  
 
-    RenderLine* line1 = new RenderLine(spring1->getAnchorPoint(), particle1->position, MyVector(1, 1, 1));
-    RenderLine* line2 = new RenderLine(spring2->getAnchorPoint(), particle2->position, MyVector(1, 1, 1));
-    RenderLine* line3 = new RenderLine(spring3->getAnchorPoint(), particle3->position, MyVector(1, 1, 1));
-    RenderLine* line4 = new RenderLine(spring4->getAnchorPoint(), particle4->position, MyVector(1, 1, 1));
-    RenderLine* line5 = new RenderLine(spring5->getAnchorPoint(), particle5->position, MyVector(1, 1, 1));
+    RenderLine* line1 = new RenderLine(cable1->getAnchorPoint(), particle1->position, MyVector(1, 1, 1));
+    RenderLine* line2 = new RenderLine(cable2->getAnchorPoint(), particle2->position, MyVector(1, 1, 1));
+    RenderLine* line3 = new RenderLine(cable3->getAnchorPoint(), particle3->position, MyVector(1, 1, 1));
+    RenderLine* line4 = new RenderLine(cable4->getAnchorPoint(), particle4->position, MyVector(1, 1, 1));
+    RenderLine* line5 = new RenderLine(cable5->getAnchorPoint(), particle5->position, MyVector(1, 1, 1));
 
     ///////////////////////////////////////////////////
   
@@ -454,34 +458,47 @@ int main(void)
         glBindVertexArray(VAO);
 
         for (RenderParticle* particle : vecRenderParticle) {
-            line1->Update(spring1->getAnchorPoint(), particle1->position, projectionMatrix);
-            line1->Draw();
+            if (ortho->getCameraUse()) {
+                shader->setMat4("projection", 1, ortho->getProjectionMatrix());
+                shader->setMat4("view", 1, ortho->getViewMatrix());
 
-            line2->Update(spring2->getAnchorPoint(), particle2->position, projectionMatrix);
-            line2->Draw();
+                line1->Update(cable1->getAnchorPoint(), particle1->position, ortho->getProjectionMatrix());
+                line1->Draw();
 
-            line3->Update(spring3->getAnchorPoint(), particle3->position, projectionMatrix);
-            line3->Draw();
+                line2->Update(cable2->getAnchorPoint(), particle2->position, ortho->getProjectionMatrix());
+                line2->Draw();
 
-            line4->Update(spring4->getAnchorPoint(), particle4->position, projectionMatrix);
-            line4->Draw();
+                line3->Update(cable3->getAnchorPoint(), particle3->position, ortho->getProjectionMatrix());
+                line3->Draw();
 
-            line5->Update(spring5->getAnchorPoint(), particle5->position, projectionMatrix);
-            line5->Draw();
+                line4->Update(cable4->getAnchorPoint(), particle4->position, ortho->getProjectionMatrix());
+                line4->Draw();
+
+                line5->Update(cable5->getAnchorPoint(), particle5->position, ortho->getProjectionMatrix());
+                line5->Draw();
+            }
+
+            if (per->getCameraUse()) {
+                shader->setMat4("projection", 1, per->getProjectionMatrix());
+                shader->setMat4("view", 1, per->getViewMatrix());
+
+                line1->Update(cable1->getAnchorPoint(), particle1->position, ortho->getProjectionMatrix());
+                line1->Draw();
+
+                line2->Update(cable2->getAnchorPoint(), particle2->position, ortho->getProjectionMatrix());
+                line2->Draw();
+
+                line3->Update(cable3->getAnchorPoint(), particle3->position, ortho->getProjectionMatrix());
+                line3->Draw();
+
+                line4->Update(cable4->getAnchorPoint(), particle4->position, ortho->getProjectionMatrix());
+                line4->Draw();
+
+                line5->Update(cable5->getAnchorPoint(), particle5->position, ortho->getProjectionMatrix());
+                line5->Draw();
+            }
 
             particle->Draw();
-
-            //if (ortho->getCameraUse()) {
-            //    shader->setMat4("projection", 1, ortho->getProjectionMatrix());
-            //    shader->setMat4("view", 1, ortho->getViewMatrix());
-            //}
-
-            //if (per->getCameraUse()) {
-            //    shader->setMat4("projection", 1, per->getProjectionMatrix());
-            //    shader->setMat4("view", 1, per->getViewMatrix());
-            //}
-
-            shader->setMat4("projection", 1, projectionMatrix);
 
             glDrawElements(GL_TRIANGLES, mesh_indices.size(), GL_UNSIGNED_INT, 0);
         }

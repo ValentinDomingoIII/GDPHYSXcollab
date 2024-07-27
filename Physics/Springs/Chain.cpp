@@ -11,11 +11,12 @@ using namespace P6;
 void Chain::UpdateForce(P6Particle* particle, float time) {
 	MyVector pos = particle->position;
 
-	// vector pos->anchorPoint
+	// vector    Pos ->  anchor point of the chain
 	MyVector force = pos - this->anchorPoint;
-	// distance of V above / lcurr
+	// distance of of the vector above
 	float mag = force.magnitude();
-
+	
+	// if the current length of the chain is greater than or equal then the rest length
 	if (mag >= this->restLength) {
 		// neutralize the gravity
 		force = (MyVector(0 ,9.8f ,0) + particle->velocity * -1.f) * particle->mass;
