@@ -75,7 +75,9 @@ MyVector generateRandomForce() {
 
     return Force;
 }
-
+float forceX=0, forceY=0, forceZ=0;
+//early declration
+P6Particle* particle1 = new P6Particle();
 void Key_CallBack(GLFWwindow* window, //pointer to the window
     int key, //keycode of the press
     int scancode, //physical position of the press
@@ -112,8 +114,12 @@ void Key_CallBack(GLFWwindow* window, //pointer to the window
 
     //checks if space key is RELEASED to prevent 'hold' press
 
-    if (key == GLFW_KEY_SPACE && action == GLFW_RELEASE) {
+    if (key == GLFW_KEY_P && action == GLFW_RELEASE) {
         play = !play;
+    }
+
+    if (key == GLFW_KEY_SPACE && action == GLFW_RELEASE) {
+        particle1->AddForce(MyVector(forceX, forceY, forceZ));
     }
 
     //limits camera rotation on y
@@ -129,13 +135,28 @@ void Key_CallBack(GLFWwindow* window, //pointer to the window
 int main(void)
 {
     GLFWwindow* window;
+    //for user input
+    float scale;
+    float distance;
+    
+    std::cout << "Enter the scale for the objects: ";
+    std::cin >> scale;
+    std::cout << "Enter the distance for the objects: ";
+    std::cin >> distance;
+    std::cout << "Enter the force X: ";
+    std::cin >> forceX;
+    std::cout << "Enter the force Y: ";
+    std::cin >> forceY;
+    std::cout << "Enter the force Z: ";
+    std::cin >> forceZ;
+
 
     /* Initialize the library */
     if (!glfwInit())
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Quiz 1 - BUMANGLAG", NULL, NULL);
+    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "PHASE 2", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -219,31 +240,35 @@ int main(void)
 
     std::vector<RenderParticle*> vecRenderParticle;
 
-    P6Particle* particle1 = new P6Particle();
-    particle1->position = MyVector(-100, 150, 0);
+    
+    particle1->position = MyVector(0-(distance*2), 150, 0);
     particle1->mass = 50.f; // 1KG
-    particle1->AddForce(MyVector(10, -10, 0) * 5000.0f); // Apply some initial force
+   // particle1->AddForce(MyVector(10, -10, 0) * 000.0f); // Apply some initial force
     particle1->lifespan = 1000.f;
     pWorld.forceRegistry.Add(particle1, &drag);
     pWorld.AddParticle(particle1);
 
     GLfloat red[] = { 1,0,0,1 };
 
-    float scale = 50.f;
 
     Object* obj1 = new Object(red, shader);
     obj1->scale_x = scale;
     obj1->scale_y = scale;
     obj1->scale_z = scale;
 
+    particle1->radius = scale;
+
+
+
+
     RenderParticle* renderParticle1 = new RenderParticle(particle1, obj1);
     renderParticle1->scale = glm::vec3(particle1->radius, particle1->radius, particle1->radius);
     vecRenderParticle.push_back(renderParticle1);
-
+    //////////////2nd ball////////////////////////////
     P6Particle* particle2 = new P6Particle();
-    particle2->position = MyVector(100, 150, 0);
+    particle2->position = MyVector(0-distance, 150, 0);
     particle2->mass = 50.f; // 1KG
-    particle2->AddForce(MyVector(-10, -10, 0) * 50000.0f); // Apply some initial force
+    particle2->AddForce(MyVector(-10, -10, 0) * 0000.0f); // Apply some initial force
     particle2->lifespan = 1000.f;
     pWorld.forceRegistry.Add(particle2, &drag);
     pWorld.AddParticle(particle2);
@@ -255,19 +280,106 @@ int main(void)
     obj2->scale_y = scale;
     obj2->scale_z = scale;
 
+    particle2->radius = scale;
+ 
+
     RenderParticle* renderParticle2 = new RenderParticle(particle2, obj2);
     renderParticle2->scale = glm::vec3(particle2->radius, particle2->radius, particle2->radius);
     vecRenderParticle.push_back(renderParticle2);
+    /////////////////////3RD OBJECT//////////////////////////////
+         
+    
+    P6Particle* particle3 = new P6Particle();
+    particle3->position = MyVector(0, 150, 0);
+    particle3->mass = 50.f; // 1KG
+    particle3->AddForce(MyVector(-10, -10, 0) * 0000.0f); // Apply some initial force
+    particle3->lifespan = 1000.f;
+    pWorld.forceRegistry.Add(particle3, &drag);
+    pWorld.AddParticle(particle3);
 
-    AnchoredSpring* spring1 = new AnchoredSpring(MyVector(-100, 200, 0), 5.0f, 0.5f);
+    GLfloat velvet[] = { 0.545f, 0.0f, 0.545f, 1.0f };
+
+    Object* obj3 = new Object(velvet, shader);
+    obj3->scale_x = scale;
+    obj3->scale_y = scale;
+    obj3->scale_z = scale;
+
+    particle3->radius = scale;
+
+
+    RenderParticle* renderParticle3 = new RenderParticle(particle3, obj3);
+    renderParticle3->scale = glm::vec3(particle3->radius, particle3->radius, particle3->radius);
+    vecRenderParticle.push_back(renderParticle3);
+    //////////////////////////////4TH OBJECT /////////////////////
+
+    P6Particle* particle4 = new P6Particle();
+    particle4->position = MyVector(0+distance, 150, 0);
+    particle4->mass = 50.f; // 1KG
+    particle4->AddForce(MyVector(-10, -10, 0) * 0000.0f); // Apply some initial force
+    particle4->lifespan = 1000.f;
+    pWorld.forceRegistry.Add(particle4, &drag);
+    pWorld.AddParticle(particle4);
+
+    GLfloat Lavender[] = { 0.9, 0.9, 0.98, 1.0 };
+
+    Object* obj4 = new Object(Lavender, shader);
+    obj4->scale_x = scale;
+    obj4->scale_y = scale;
+    obj4->scale_z = scale;
+
+    particle4->radius = scale;
+   
+
+    RenderParticle* renderParticle4 = new RenderParticle(particle4, obj4);
+    renderParticle4->scale = glm::vec3(particle4->radius, particle4->radius, particle4->radius);
+    vecRenderParticle.push_back(renderParticle4);
+/////////////////////////////////5th OBJECT ////////////////////
+    P6Particle* particle5 = new P6Particle();
+    particle5->position = MyVector(0+(distance*2), 150, 0);
+    particle5->mass = 50.f; // 1KG
+    particle5->AddForce(MyVector(-10, -10, 0) * 0000.0f); // Apply some initial force
+    particle5->lifespan = 1000.f;
+    pWorld.forceRegistry.Add(particle5, &drag);
+    pWorld.AddParticle(particle5);
+
+    GLfloat violet[] = { 0.933f, 0.510f, 0.933f, 1.0f };
+
+    Object* obj5 = new Object(violet, shader);
+    obj5->scale_x = scale;
+    obj5->scale_y = scale;
+    obj5->scale_z = scale;
+    particle5->radius = scale;
+    RenderParticle* renderParticle5 = new RenderParticle(particle5, obj5);
+    renderParticle5->scale = glm::vec3(particle5->radius, particle5->radius, particle5->radius);
+    vecRenderParticle.push_back(renderParticle5);
+
+    ///////////////////class lines///////////////////////
+    AnchoredSpring* spring1 = new AnchoredSpring(MyVector(0-(distance*2), 160, 0), 5.0f, 0.5f);
     pWorld.forceRegistry.Add(particle1, spring1);
 
-    ParticleSpring* spring2 = new ParticleSpring(particle1, 5.0f, 0.5f);
+
+    AnchoredSpring* spring2 = new AnchoredSpring(MyVector(0-distance, 160, 0), 5.0f, 0.5f);
     pWorld.forceRegistry.Add(particle2, spring2);
 
-    RenderLine* line1 = new RenderLine(spring1->getAnchorPoint(), particle1->position, MyVector(1, 1, 1));
+    AnchoredSpring* spring3 = new AnchoredSpring(MyVector(0, 160, 0), 5.0f, 0.5f);
+    pWorld.forceRegistry.Add(particle3, spring3);
 
+
+    AnchoredSpring* spring4 = new AnchoredSpring(MyVector(0+distance, 160, 0), 5.0f, 0.5f);
+    pWorld.forceRegistry.Add(particle4, spring4);
+
+    AnchoredSpring* spring5 = new AnchoredSpring(MyVector(0+(distance*2), 160, 0), 5.0f, 0.5f);
+    pWorld.forceRegistry.Add(particle5, spring5);
+ 
+
+    RenderLine* line1 = new RenderLine(spring1->getAnchorPoint(), particle1->position, MyVector(1, 1, 1));
     RenderLine* line2 = new RenderLine(spring2->getAnchorPoint(), particle2->position, MyVector(1, 1, 1));
+    RenderLine* line3 = new RenderLine(spring3->getAnchorPoint(), particle3->position, MyVector(1, 1, 1));
+    RenderLine* line4 = new RenderLine(spring4->getAnchorPoint(), particle4->position, MyVector(1, 1, 1));
+    RenderLine* line5 = new RenderLine(spring5->getAnchorPoint(), particle5->position, MyVector(1, 1, 1));
+
+    ///////////////////////////////////////////////////
+  
 
     glfwSetKeyCallback(window, Key_CallBack); //calls function for updating x,y,z of the camera
 
@@ -347,6 +459,15 @@ int main(void)
 
             line2->Update(spring2->getAnchorPoint(), particle2->position, projectionMatrix);
             line2->Draw();
+
+            line3->Update(spring3->getAnchorPoint(), particle3->position, projectionMatrix);
+            line3->Draw();
+
+            line4->Update(spring4->getAnchorPoint(), particle4->position, projectionMatrix);
+            line4->Draw();
+
+            line5->Update(spring5->getAnchorPoint(), particle5->position, projectionMatrix);
+            line5->Draw();
 
             particle->Draw();
 
