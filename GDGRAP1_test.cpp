@@ -456,46 +456,46 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
         glBindVertexArray(VAO);
-
+        
         for (RenderParticle* particle : vecRenderParticle) {
             if (ortho->getCameraUse()) {
                 shader->setMat4("projection", 1, ortho->getProjectionMatrix());
                 shader->setMat4("view", 1, ortho->getViewMatrix());
 
                 line1->Update(cable1->getAnchorPoint(), particle1->position, ortho->getProjectionMatrix());
-                line1->Draw();
+                line1->Draw(shader, ortho->getViewMatrix());
 
                 line2->Update(cable2->getAnchorPoint(), particle2->position, ortho->getProjectionMatrix());
-                line2->Draw();
+                line2->Draw(shader, ortho->getViewMatrix());
 
                 line3->Update(cable3->getAnchorPoint(), particle3->position, ortho->getProjectionMatrix());
-                line3->Draw();
+                line3->Draw(shader, ortho->getViewMatrix());
 
                 line4->Update(cable4->getAnchorPoint(), particle4->position, ortho->getProjectionMatrix());
-                line4->Draw();
+                line4->Draw(shader, ortho->getViewMatrix());
 
                 line5->Update(cable5->getAnchorPoint(), particle5->position, ortho->getProjectionMatrix());
-                line5->Draw();
+                line5->Draw(shader, ortho->getViewMatrix());
             }
 
             if (per->getCameraUse()) {
                 shader->setMat4("projection", 1, per->getProjectionMatrix());
                 shader->setMat4("view", 1, per->getViewMatrix());
 
-                line1->Update(cable1->getAnchorPoint(), particle1->position, ortho->getProjectionMatrix());
-                line1->Draw();
+                line1->Update(cable1->getAnchorPoint(), particle1->position, per->getProjectionMatrix());
+                line1->Draw(shader, per->getViewMatrix());
 
-                line2->Update(cable2->getAnchorPoint(), particle2->position, ortho->getProjectionMatrix());
-                line2->Draw();
+                line2->Update(cable2->getAnchorPoint(), particle2->position, per->getProjectionMatrix());
+                line2->Draw(shader, per->getViewMatrix());
 
-                line3->Update(cable3->getAnchorPoint(), particle3->position, ortho->getProjectionMatrix());
-                line3->Draw();
+                line3->Update(cable3->getAnchorPoint(), particle3->position, per->getProjectionMatrix());
+                line3->Draw(shader, per->getViewMatrix());
 
-                line4->Update(cable4->getAnchorPoint(), particle4->position, ortho->getProjectionMatrix());
-                line4->Draw();
+                line4->Update(cable4->getAnchorPoint(), particle4->position, per->getProjectionMatrix());
+                line4->Draw(shader, per->getViewMatrix());
 
-                line5->Update(cable5->getAnchorPoint(), particle5->position, ortho->getProjectionMatrix());
-                line5->Draw();
+                line5->Update(cable5->getAnchorPoint(), particle5->position, per->getProjectionMatrix());
+                line5->Draw(shader, per->getViewMatrix());
             }
 
             particle->Draw();

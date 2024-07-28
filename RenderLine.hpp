@@ -26,14 +26,18 @@ public:
 
 	}
 
-	void Draw() {
-		glUseProgram(0);
+	void Draw(Shader* shader, glm::mat4 view) {
+		glUseProgram(shader->ID);
+
+		shader->setMat4("transform", 1, glm::mat4(1.0f));
+		shader->setMat4("view", 1, view);
+		shader->setMat4("projection", 1, this->projectionMatrix);
 	
-		glm::vec4 d1 = this->projectionMatrix * glm::vec4(
+		glm::vec4 d1 = glm::vec4(
 			this->P1.x, this->P1.y, this->P1.z, 1.0f
 		);
 
-		glm::vec4 d2 = this->projectionMatrix * glm::vec4(
+		glm::vec4 d2 = glm::vec4(
 			this->P2.x, this->P2.y, this->P2.z, 1.0f
 		);
 
