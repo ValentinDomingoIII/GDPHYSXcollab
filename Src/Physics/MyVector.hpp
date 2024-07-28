@@ -18,6 +18,7 @@ namespace P6 {
 	public:
 		MyVector operator + (const MyVector v);
 		MyVector operator - (const MyVector v);
+		MyVector operator / (const float v);
 		MyVector operator * (const float v);
 
 		void operator += (const MyVector v);

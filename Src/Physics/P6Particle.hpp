@@ -11,10 +11,10 @@ namespace P6 {
 	class P6Particle {
 
 	public:
-		float radius = 50.f;
+		float radius;
 
 		// how bouncy the particle is
-		float restitution = 1.f;
+		float restitution = 0.9f;
 
 		float mass;
 

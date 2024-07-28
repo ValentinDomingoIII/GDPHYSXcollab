@@ -12,7 +12,7 @@ namespace P6 {
 		// set an arbitrary default number for
 		// the max number of resolve calls
 		ContactResolver contactResolver = ContactResolver(20);
-	private:
+	public:
 		GravityForceGenerator Gravity = GravityForceGenerator(MyVector(0, -9.8f, 0));
 	public:
 		std::vector<ParticleContact*> Contacts;

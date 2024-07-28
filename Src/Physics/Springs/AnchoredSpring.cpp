@@ -15,7 +15,7 @@ void AnchoredSpring::UpdateForce(P6Particle* particle, float time){
 	MyVector force = pos - this->anchorPoint;
 	// distance of V above / lcurr
 	float mag = force.magnitude();
-	
+
 	//		   f     =			-k			  *			|lcurr - lrest|
 	float springForce = -this->springConstant * abs(mag - this->restLength);
 
