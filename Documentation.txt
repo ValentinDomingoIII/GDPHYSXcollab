@@ -1,0 +1,22 @@
+For the implementation of our code first we initialized or rather made the user ask for the inputs required for the program..
+
+then in the code we initialize and render each ball or at least give it's variables individually 
+and each with different color only for determining what ball number it is.
+
+which is then the balls is now under physics world where physics happen.
+
+now the CABLE class, the class handles the cable that allows for the newton cradle simulation and which the class was based of the anchoredspring and how it works is..
+documented in the actual file or cable class...
+
+TLDR for cable class:
+it clamps the particle to the position where the max length of the rope is designated  ALLOWING THE PARTICLE TO STILL HAVE SOME OF ITS VELOCITY SO THAT IT WILL CONTINUE TO MOVE ALONG THE ROPE'S MAXIMUM LENGTH and storing some variables and eventually setting a new velocity
+
+
+in general there is nothing much to document aside from the reused camera and things we have applied in class.
+
+
+
+Locations of files:
+Cable is inside springs
+camera is in the main folder or outside any folder.
+
