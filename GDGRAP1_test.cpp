@@ -167,7 +167,7 @@ int main(void)
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "PHASE 2", NULL, NULL);
+    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "MP PHASE 2", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
