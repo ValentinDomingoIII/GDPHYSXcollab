@@ -2,6 +2,8 @@
 #include "../ForceGenerator.hpp"
 #include "../MyVector.hpp"
 
+/*CABLE CLASS*/
+
 namespace P6 {
 	class Cable : public ForceGenerator {
 	private:
