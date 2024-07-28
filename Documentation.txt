@@ -1,3 +1,9 @@
+Locations of files:
+Cable is inside the physics folder then inside spring.
+Camera and Rendering Line is in the same folder as the main cpp
+
+NOTE: May need more force
+
 For the implementation of our code first we initialized or rather made the user ask for the inputs required for the program..
 
 then in the code we initialize and render each ball or at least give it's variables individually 
@@ -15,8 +21,4 @@ it clamps the particle to the position where the max length of the rope is desig
 in general there is nothing much to document aside from the reused camera and things we have applied in class.
 
 
-
-Locations of files:
-Cable is inside springs
-camera is in the main folder or outside any folder.
 
