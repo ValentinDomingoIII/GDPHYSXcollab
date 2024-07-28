@@ -9,8 +9,6 @@ private:
 	MyVector P1;
 	MyVector P2;
 
-	glm::mat4 projectionMatrix;
-
 	MyVector Color;
 public:
 	RenderLine(MyVector p1, MyVector p2, MyVector color) {
@@ -19,19 +17,15 @@ public:
 		this->Color = color;
 	}
 
-	void Update(MyVector p1, MyVector p2, glm::mat4 projectionMatrix) {
+	void Update(MyVector p1, MyVector p2) {
 		this->P1 = p1;
 		this->P2 = p2;
-		this->projectionMatrix = projectionMatrix;
-
 	}
 
-	void Draw(Shader* shader, glm::mat4 view) {
+	void Draw(Shader* shader) {
 		glUseProgram(shader->ID);
 
 		shader->setMat4("transform", 1, glm::mat4(1.0f));
-		shader->setMat4("view", 1, view);
-		shader->setMat4("projection", 1, this->projectionMatrix);
 	
 		glm::vec4 d1 = glm::vec4(
 			this->P1.x, this->P1.y, this->P1.z, 1.0f

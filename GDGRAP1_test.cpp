@@ -31,11 +31,13 @@
 
 #include "Camera.hpp"
 
+// use the namespace so it doesn't need to be typed later on
 using namespace P6;
 
 #define WINDOW_HEIGHT 800.f
 #define WINDOW_WIDTH 800.f
 
+// set the starting position of the camera
 glm::vec3 cameraPos(100, 0, 400);
 
 glm::vec3 center(0, 0, 0);
@@ -224,19 +226,12 @@ int main(void)
 
     /////////////////////////////////////////////////////////////////////////
 
+    // set the shader to be used 
     Shader* shader = new Shader("Shaders/sample.vert", "Shaders/sample.frag");
 
-    // not used cameras, too lazy to remove 
+    // set the ortho and perspective
     OrthographicCamera* ortho = new OrthographicCamera(WINDOW_HEIGHT, WINDOW_WIDTH, shader);
     PerspectiveCamera* per = new PerspectiveCamera(WINDOW_HEIGHT, WINDOW_WIDTH, shader);
-
-    glm::mat4 projectionMatrix = glm::ortho(
-        -WINDOW_WIDTH / 2.f, //left
-        WINDOW_WIDTH / 2.f, //right
-        -WINDOW_HEIGHT / 2.f, //bot
-        WINDOW_HEIGHT / 2.f, //top
-        -400.f, //z near
-        400.f);  //z far
 
     PhysicsWorld pWorld = PhysicsWorld();
     pWorld.Gravity = MyVector(0, yGravity, 0);
@@ -374,7 +369,15 @@ int main(void)
 
     Cable* cable5 = new Cable(MyVector(0+(distance*2), 160, 0), length);
     pWorld.forceRegistry.Add(particle5, cable5);
- 
+    
+    std::vector<Cable*> cables = std::vector<Cable*>();
+
+    // store them in a vector for ease of access later
+    cables.push_back(cable1);
+    cables.push_back(cable2);
+    cables.push_back(cable3);
+    cables.push_back(cable4);
+    cables.push_back(cable5);
 
     RenderLine* line1 = new RenderLine(cable1->getAnchorPoint(), particle1->position, MyVector(1, 1, 1));
     RenderLine* line2 = new RenderLine(cable2->getAnchorPoint(), particle2->position, MyVector(1, 1, 1));
@@ -382,9 +385,17 @@ int main(void)
     RenderLine* line4 = new RenderLine(cable4->getAnchorPoint(), particle4->position, MyVector(1, 1, 1));
     RenderLine* line5 = new RenderLine(cable5->getAnchorPoint(), particle5->position, MyVector(1, 1, 1));
 
+    std::vector<RenderLine*> lines = std::vector<RenderLine*>();
+
+    // store them in a vector for ease of access later
+    lines.push_back(line1);
+    lines.push_back(line2);
+    lines.push_back(line3);
+    lines.push_back(line4);
+    lines.push_back(line5);
+
     ///////////////////////////////////////////////////
   
-
     glfwSetKeyCallback(window, Key_CallBack); //calls function for updating x,y,z of the camera
 
     bool pause = false;
@@ -457,50 +468,39 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
         glBindVertexArray(VAO);
         
+        int index = 0;
+
         for (RenderParticle* particle : vecRenderParticle) {
+            // if switch to ortho camera, use its projection and view matrix
             if (ortho->getCameraUse()) {
                 shader->setMat4("projection", 1, ortho->getProjectionMatrix());
                 shader->setMat4("view", 1, ortho->getViewMatrix());
-
-                line1->Update(cable1->getAnchorPoint(), particle1->position, ortho->getProjectionMatrix());
-                line1->Draw(shader, ortho->getViewMatrix());
-
-                line2->Update(cable2->getAnchorPoint(), particle2->position, ortho->getProjectionMatrix());
-                line2->Draw(shader, ortho->getViewMatrix());
-
-                line3->Update(cable3->getAnchorPoint(), particle3->position, ortho->getProjectionMatrix());
-                line3->Draw(shader, ortho->getViewMatrix());
-
-                line4->Update(cable4->getAnchorPoint(), particle4->position, ortho->getProjectionMatrix());
-                line4->Draw(shader, ortho->getViewMatrix());
-
-                line5->Update(cable5->getAnchorPoint(), particle5->position, ortho->getProjectionMatrix());
-                line5->Draw(shader, ortho->getViewMatrix());
             }
 
+            // switch if perspective camera is in use, use its projection and view matrix
             if (per->getCameraUse()) {
+                
                 shader->setMat4("projection", 1, per->getProjectionMatrix());
                 shader->setMat4("view", 1, per->getViewMatrix());
-
-                line1->Update(cable1->getAnchorPoint(), particle1->position, per->getProjectionMatrix());
-                line1->Draw(shader, per->getViewMatrix());
-
-                line2->Update(cable2->getAnchorPoint(), particle2->position, per->getProjectionMatrix());
-                line2->Draw(shader, per->getViewMatrix());
-
-                line3->Update(cable3->getAnchorPoint(), particle3->position, per->getProjectionMatrix());
-                line3->Draw(shader, per->getViewMatrix());
-
-                line4->Update(cable4->getAnchorPoint(), particle4->position, per->getProjectionMatrix());
-                line4->Draw(shader, per->getViewMatrix());
-
-                line5->Update(cable5->getAnchorPoint(), particle5->position, per->getProjectionMatrix());
-                line5->Draw(shader, per->getViewMatrix());
             }
 
+            // to maintain the white color of the lines
+            glm::vec4 white(1.0f, 1.0f, 1.0f, 1.0f);
+            shader->setGLfloat("color", 1 , &white[0]);
+
+            //update and draw the line
+            lines[index]->Update(cables[index]->getAnchorPoint(), particle->getParticle()->position);
+            lines[index]->Draw(shader);
+
+            // to maintain the color of each particle
+            shader->setGLfloat("color", 1, particle->object->color);
+            
+            // call the particle's draw function
             particle->Draw();
 
+            index++;
             glDrawElements(GL_TRIANGLES, mesh_indices.size(), GL_UNSIGNED_INT, 0);
+            
         }
 
         glfwSwapBuffers(window);
